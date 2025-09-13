@@ -1,4 +1,4 @@
-# 🔐 Controle de Acesso – Web App
+# 🔐 Controle de Acesso – Web App, O projeto esta sendo refeito este README esta desatualizado.
 
 Aplicação **fullstack** para controle de acesso e gestão de itens, com:
 
