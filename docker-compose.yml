@@ -1,0 +1,44 @@
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: oracle-db
+    environment:
+      - ORACLE_PASSWORD=oracle
+      - APP_USER=app_user
+      - APP_USER_PASSWORD=app123
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo 'SELECT 1 FROM dual;' | sqlplus -s app_user/app123@//localhost:1521/XEPDB1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+
+  backend-app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend-app
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@//oracle-db:1521/XEPDB1
+      - SPRING_DATASOURCE_USERNAME=app_user
+      - SPRING_DATASOURCE_PASSWORD=app123
+      - JWT_SECRET=MinhaChaveSuperSecreta123456789
+      - JWT_EXPIRATION=3600000
+    ports:
+      - "8087:8087"
+
+  frontend-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-app
+    depends_on:
+      - backend-app
+    ports:
+      - "3000:80"
+
