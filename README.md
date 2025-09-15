@@ -1,136 +1,77 @@
-# 🔐 Controle de Acesso – Web App, O projeto esta sendo refeito este README esta desatualizado.
+# Aplicação de Controle de Acesso e Itens
 
-Aplicação **fullstack** para controle de acesso e gestão de itens, com:
+## Descrição
 
-- **Backend**: Spring Boot (Java 17), Oracle Database, APIs REST, autenticação com JWT.  
-- **Frontend**: React + Vite, integração com as APIs via Axios, autenticação com Context API.  
-- **Infra**: Docker Compose (Oracle + Backend + Frontend).  
+Este projeto é uma aplicação **fullstack** para controle de acesso e
+gestão de itens.
 
----
+### Tecnologias utilizadas
 
-## 🚀 Tecnologias utilizadas
+-   **Backend**: Spring Boot (Java 17), Oracle Database, APIs REST,
+    autenticação com JWT
+-   **Frontend**: React + Vite, integração via Axios, autenticação com
+    Context API
+-   **Infraestrutura**: Docker Compose (Oracle + Backend + Frontend)
 
-### 🔹 Backend
-- Java 17+  
-- Spring Boot 3.x  
-- Spring Security + JWT  
-- Spring Data JPA (Oracle)  
-- Maven  
+------------------------------------------------------------------------
 
-### 🔹 Frontend
-- React 18 + Vite  
-- Axios  
-- React Router DOM  
-- TailwindCSS  
+## Estrutura do Banco de Dados
 
-### 🔹 Banco de Dados
-- Oracle XE (21c – Docker)  
+A aplicação utiliza o seguinte esquema inicial no Oracle:
 
----
+-   **usuarios**: Armazena informações dos usuários (nome, email, senha,
+    ativo).
+-   **perfis**: Define perfis (roles) como `ROLE_ADMIN`, `ROLE_USER`.
+-   **usuario_perfis**: Relaciona usuários aos perfis (N:N).
+-   **itens**: Armazena os itens cadastrados e suas quantidades.
+-   **acessos**: Registra o histórico de ações dos usuários.
 
-## 📂 Estrutura do Projeto
+O schema inicial está no arquivo `schema.sql`.
 
-### Backend (`controle-web-backend/`)
-```
-src/main/java/com/exemplo/controleweb/
-│── config/        # Configurações (CORS, segurança)
-│── security/      # JWT + filtros de autenticação
-│── model/         # Entidades JPA
-│── repository/    # Repositórios
-│── controller/    # Endpoints REST
-│── dto/           # DTOs de entrada/saída
-```
+------------------------------------------------------------------------
 
-### Frontend (`controle-web-frontend/`)
-```
-src/
-│── api/          # Configuração do Axios
-│── auth/         # Contexto de autenticação + rotas protegidas
-│── pages/        # Páginas (Login, Itens, etc.)
-│── components/   # Componentes reutilizáveis (Navbar, Loader, etc.)
-│── styles/       # Estilização (Tailwind)
-```
+## Executando a Aplicação
 
----
+### Pré-requisitos
 
-## ⚙️ Como rodar o projeto
+-   Docker e Docker Compose instalados
 
-### 🔹 1. Pré-requisitos
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)  
-- (Opcional para desenvolvimento local)  
-  - [Java JDK 17+](https://www.oracle.com/java/technologies/downloads/)  
-  - [Maven](https://maven.apache.org/download.cgi)  
-  - [Node.js LTS (>= 18.x)](https://nodejs.org/en/)  
+### Passos
 
----
+1.  Clone este repositório:
 
-### 🔹 2. Rodando com Docker Compose
-Na raiz do projeto (onde está o `docker-compose.yml`):
+    ``` bash
+    git clone https://github.com/OGustav-o/Aplica-o-Web-de-Controle
+    cd Aplica-o-Web-de-Controle
+    ```
 
-```sh
-docker compose up --build
-```
+2.  Inicie os containers:
 
-Serviços disponíveis:  
-- Oracle DB → `localhost:1521`  
-- Backend → `http://localhost:8080`  
-- Frontend → `http://localhost:5173`  
+    ``` bash
+    docker-compose up --build
+    ```
 
----
+3.  O backend estará disponível em <http://localhost:8087>\
+    O frontend estará disponível em <http://localhost:5173>
 
-### 🔹 3. Rodando manualmente (sem Docker)
-#### Backend
-```sh
-cd controle-web-backend
-mvn clean install
-mvn spring-boot:run
-```
+------------------------------------------------------------------------
 
-#### Frontend
-```sh
-cd controle-web-frontend
-npm install
-npm run dev
-```
+## Autenticação
 
----
+A autenticação é feita via **JWT (JSON Web Token)**.\
+Após o login, o token deve ser enviado no header
+`Authorization: Bearer <token>` em todas as requisições autenticadas.
 
-## 🔑 Autenticação
+------------------------------------------------------------------------
 
-- Login via `/auth/login` com usuário e senha.  
-- Backend retorna `accessToken` (JWT) + `refreshToken`.  
-- `accessToken` é enviado no **header Authorization**:  
-  ```
-  Authorization: Bearer <token>
-  ```
+## Próximos Passos
 
-Exemplo de login (Postman):
-```http
-POST http://localhost:8080/auth/login
-Content-Type: application/json
+-   Criar usuários iniciais (via `data.sql` ou API de cadastro)
+-   Configurar permissões de acesso por perfil
+-   Implementar testes automatizados
 
-{
-  "username": "admin",
-  "password": "123456"
-}
-```
+------------------------------------------------------------------------
 
-Resposta:
-```json
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI...",
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
-}
-```
+## Autor
 
----
-
-## 📊 Melhorias futuras
-- CRUD completo de usuários/itens.  
-- Painel administrativo.  
-- Refresh token com cookie HttpOnly.  
-- Deploy em nuvem (AWS/GCP/Azure).  
-
----
-
-✍️ Desenvolvido para estudo de **arquitetura fullstack com Java + React + Oracle**.  
+Desenvolvido por **Gustavo Dos Santos Ferreira Melo**
